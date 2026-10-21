@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>New Styles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Figtree:wght@400;500;600&display=swap">
+<style>
+  /* Layout: a quiet jeweler's tray — tight photo grid, piece number as the label a customer replies with */
+  :root {
+    --bg: #f6f5f3;
+    --surface: #ffffff;
+    --fg: #1d1b1a;
+    --muted: #6d6863;
+    --line: #e2dfdb;
+    --accent: #7a2e3a;
+    --accent-fg: #ffffff;
+    --scrim: rgba(18, 16, 15, 0.92);
+    --display: "Bodoni Moda", "Didot", "Times New Roman", serif;
+    --body: "Figtree", -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #141312; --surface: #1d1b1a; --fg: #f1eeea; --muted: #a39d96;
+      --line: #2e2b29; --accent: #d98a97; --accent-fg: #1a1210; --scrim: rgba(0, 0, 0, 0.94);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #141312; --surface: #1d1b1a; --fg: #f1eeea; --muted: #a39d96;
+    --line: #2e2b29; --accent: #d98a97; --accent-fg: #1a1210; --scrim: rgba(0, 0, 0, 0.94);
+    color-scheme: dark;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--body);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 40px 64px;
+  }
+  header { display: grid; gap: 10px; margin-bottom: 28px; }
+  h1 {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: clamp(2.4rem, 7vw, 3.6rem);
+    line-height: 1;
+    margin: 0;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  h1 em { font-style: italic; color: var(--accent); }
+  .lede { margin: 0; color: var(--muted); max-width: 52ch; }
+
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+  .chip {
+    font: 500 13px/1 var(--body);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 10px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--fg);
+    cursor: pointer;
+  }
+  .chip[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+  .chip:focus-visible, .play:focus-visible, .shot:focus-visible, .close:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .chip .n { opacity: 0.6; margin-left: 4px; font-variant-numeric: tabular-nums; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 22px 16px;
+  }
+  @media (max-width: 520px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 10px; } }
+
+  .piece { display: grid; gap: 8px; min-width: 0; }
+  .frame {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    max-width: 100%;
+    overflow: hidden;
+    border-radius: 6px;
+    background: var(--line);
+  }
+  .shot, .frame video {
+    display: block; width: 100%; height: 100%; object-fit: cover;
+    border: 0; padding: 0; background: none; cursor: zoom-in;
+  }
+  .shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .play {
+    position: absolute; left: 8px; bottom: 8px;
+    display: inline-flex; align-items: center; gap: 6px;
+    font: 600 12px/1 var(--body); letter-spacing: 0.04em; text-transform: uppercase;
+    padding: 8px 11px 8px 9px;
+    border-radius: 999px; border: 0;
+    background: var(--accent); color: var(--accent-fg);
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.18);
+  }
+  .play svg { width: 12px; height: 12px; fill: currentColor; }
+  .meta { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+  .num {
+    font-family: var(--display); font-style: italic; font-size: 1.05rem;
+    color: var(--accent); font-variant-numeric: tabular-nums; flex: none;
+  }
+  .name { font-weight: 500; font-size: 14px; line-height: 1.3; }
+
+  .note { margin-top: 36px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+
+  /* lightbox */
+  .lb {
+    position: fixed; inset: 0; z-index: 50;
+    background: var(--scrim);
+    display: grid; grid-template-rows: auto 1fr;
+    padding: calc(env(safe-area-inset-top, 0px) + 10px) max(12px, env(safe-area-inset-right, 0px)) calc(env(safe-area-inset-bottom, 0px) + 12px) max(12px, env(safe-area-inset-left, 0px));
+  }
+  .lb-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; color: #f1eeea; padding-bottom: 10px; }
+  .lb-title { font-family: var(--display); font-size: 1.15rem; min-width: 0; }
+  .lb-title .num { color: #e7a3ae; margin-right: 6px; }
+  .close {
+    flex: none; width: 40px; height: 40px; border-radius: 50%; border: 0;
+    background: rgba(255,255,255,0.14); color: #fff; font-size: 22px; line-height: 1; cursor: pointer;
+  }
+  .lb-body { min-height: 0; display: grid; place-items: center; }
+  .lb-body img, .lb-body video { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 4px; }
+  .lb-tabs { display: flex; gap: 6px; }
+  .lb-tabs button {
+    font: 600 12px/1 var(--body); letter-spacing: 0.04em; text-transform: uppercase;
+    padding: 9px 12px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.3);
+    background: transparent; color: #fff; cursor: pointer;
+  }
+  .lb-tabs button[aria-pressed="true"] { background: #fff; color: #1d1b1a; }
+  @media (prefers-reduced-motion: no-preference) {
+    .piece { transition: opacity .2s ease; }
+  }
+</style>
+<style>html{padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <h1>New <em>Styles</em></h1>
+    <p class="lede" id="lede">Every piece is shown being worn. Tap a photo to see it bigger, or tap Video to see it move. To ask about a piece, just send its number.</p>
+  </header>
+
+  <div class="filters" role="group" aria-label="Filter pieces" id="filters"></div>
+  <main class="grid" id="grid"></main>
+
+  <p class="note">All pieces are photographed on the hand, wrist or ear in natural light, so color and sparkle are true to life.</p>
+</div>
+
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-labelledby="lb-title">
+  <div class="lb-bar">
+    <div class="lb-title" id="lb-title"></div>
+    <div class="lb-tabs" id="lb-tabs"></div>
+    <button class="close" id="lb-close" aria-label="Close">&times;</button>
+  </div>
+  <div class="lb-body" id="lb-body"></div>
+</div>
+
+<script>
+const PIECES = [
+  ["01","Marquise Diamond Band","Rings",1],
+  ["02","Chain Link Ring with Marquise Diamond","Rings",1],
+  ["03","Halo Diamond Ring, Triple Band","Rings",1],
+  ["04","Pavé Swirl Ring","Rings",1],
+  ["05","Rope Knot Diamond Ring, Yellow Gold","Rings",1],
+  ["06","Rope Knot Diamond Ring, White Gold","Rings",1],
+  ["07","Ruby Zigzag Ring","Rings",1],
+  ["08","Blue Topaz Pear and Sapphire Ring","Rings",1],
+  ["09","Pavé Square Open Bar Ring","Rings",1],
+  ["10","Marquise and Black Stone Ring","Rings",1],
+  ["11","Pearl Flower Double Ring","Rings",1],
+  ["12","Pearl Sunflower Diamond Ring","Rings",1],
+  ["13","Sapphire Bar Bracelet","Bracelets",1],
+  ["14","Paperclip Bracelet, Three Diamonds","Bracelets",1],
+  ["15","Enamel Fan Bracelet","Bracelets",1],
+  ["16","Butterfly Bracelet, Yellow Gold","Bracelets",1],
+  ["17","Paperclip Bracelet, Blue Sapphire","Bracelets",1],
+  ["18","Paperclip Bracelet, Emerald","Bracelets",1],
+  ["19","Green Stone Bar Bracelet","Bracelets",1],
+  ["20","Butterfly Bracelet, Rose Gold","Bracelets",1],
+  ["21","Diamond Flower Station Bracelet","Bracelets",1],
+  ["22","Bezel Diamond Chain Bracelet","Bracelets",1],
+  ["23","Pearl Hand Chain","Bracelets",1],
+  ["24","Ruby Bar Bracelet","Bracelets",1],
+  ["25","Beaded Bracelet, Diamond Flower","Bracelets",1],
+  ["26","Beaded Cuff, Pearl and Diamond","Bracelets",1],
+  ["27","Wire Cuff, Halo Diamond","Bracelets",1],
+  ["28","Wire Cuff, Pavé Cluster","Bracelets",1],
+  ["29","Turquoise Bead Bracelet","Bracelets",1],
+  ["30","Pink Sapphire Wire Bangle","Bracelets",1],
+  ["32","Blue Topaz Cushion Ring","Rings",1],
+  ["33","Mother of Pearl Flower Ring","Rings",1],
+  ["34","Amethyst Emerald Cut Ring","Rings",1],
+  ["35","Multi Gem Ring, Oval Stones","Rings",1],
+  ["36","Multi Gem Ring, Pear Stones","Rings",1],
+  ["37","Textured Gold Bangle Set","Bracelets",1],
+  ["38","Amethyst Drop Earrings","Earrings",0],
+  ["39","Heart Bracelet","Bracelets",0],
+].map(([num, name, cat, video]) => ({ num, name, cat, video: !!video }));
+
+const grid = document.getElementById("grid");
+const filters = document.getElementById("filters");
+const playIcon = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 1.5v9l8-4.5z"/></svg>';
+
+function card(p) {
+  const el = document.createElement("article");
+  el.className = "piece";
+  el.dataset.cat = p.cat;
+  el.innerHTML = `
+    <div class="frame">
+      <button class="shot" aria-label="View ${p.num} ${p.name} larger">
+        <img src="media/${p.num}.jpg" alt="${p.name}, worn" loading="lazy" decoding="async">
+      </button>
+      ${p.video ? `<button class="play" aria-label="Play video of ${p.name}">${playIcon}Video</button>` : ""}
+    </div>
+    <div class="meta"><span class="num">№${p.num}</span><span class="name">${p.name}</span></div>`;
+  el.querySelector(".shot").addEventListener("click", () => openLB(p, "photo"));
+  const play = el.querySelector(".play");
+  if (play) play.addEventListener("click", () => openLB(p, "video"));
+  return el;
+}
+PIECES.forEach(p => grid.appendChild(card(p)));
+
+const cats = ["All", "Rings", "Bracelets", "Earrings"];
+cats.forEach(c => {
+  const count = c === "All" ? PIECES.length : PIECES.filter(p => p.cat === c).length;
+  const b = document.createElement("button");
+  b.className = "chip";
+  b.id = "filter-" + c.toLowerCase();
+  b.setAttribute("aria-pressed", c === "All" ? "true" : "false");
+  b.innerHTML = `${c}<span class="n">${count}</span>`;
+  b.addEventListener("click", () => {
+    filters.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+    grid.querySelectorAll(".piece").forEach(el => { el.hidden = !(c === "All" || el.dataset.cat === c); });
+  });
+  filters.appendChild(b);
+});
+
+const lb = document.getElementById("lb");
+const lbBody = document.getElementById("lb-body");
+const lbTitle = document.getElementById("lb-title");
+const lbTabs = document.getElementById("lb-tabs");
+let lastFocus = null;
+
+function show(p, mode) {
+  lbBody.innerHTML = mode === "video"
+    ? `<video src="media/${p.num}.mp4" poster="media/${p.num}-poster.jpg" controls autoplay muted loop playsinline></video>`
+    : `<img src="media/${p.num}.jpg" alt="${p.name}, worn">`;
+  lbTabs.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.dataset.mode === mode ? "true" : "false"));
+}
+function openLB(p, mode) {
+  lastFocus = document.activeElement;
+  lbTitle.innerHTML = `<span class="num">№${p.num}</span>${p.name}`;
+  lbTabs.innerHTML = p.video
+    ? `<button data-mode="photo">Photo</button><button data-mode="video">Video</button>` : "";
+  lbTabs.querySelectorAll("button").forEach(b => b.addEventListener("click", () => show(p, b.dataset.mode)));
+  show(p, mode);
+  lb.hidden = false;
+  document.body.style.overflow = "hidden";
+  document.getElementById("lb-close").focus();
+}
+function closeLB() {
+  lb.hidden = true;
+  lbBody.innerHTML = "";
+  document.body.style.overflow = "";
+  if (lastFocus) lastFocus.focus();
+}
+document.getElementById("lb-close").addEventListener("click", closeLB);
+lb.addEventListener("click", e => { if (e.target === lb || e.target === lbBody) closeLB(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !lb.hidden) closeLB(); });
+</script>
+</body>
+</html>
